@@ -1,6 +1,7 @@
 FROM python:3.6-alpine
 
-RUN apk add --no-cache gcc musl-dev mariadb-dev && \
+RUN apk update && apk add --no-cache --virtual .build-deps gcc musl-dev mariadb-dev && \
     pip install mysqlclient && \
-    apk del --purge gcc musl-dev && \
-    rm -rf /var/cache/apk/*
+    apk add --virtual .runtime-deps mariadb-client-libs && \
+    apk del .build-deps && \
+    rm -rf /var/cache/apk/* /tmp/*
